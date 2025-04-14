@@ -733,6 +733,25 @@ class DiscordNotifier {
 	}
 
 	/**
+	 * Make links in summary human-readable in Discord embeds
+	 *
+	 * @param string $summary
+	 * @return string
+	 */
+	public function parseSummary( string $summary ): string {
+		return preg_replace_callback(
+			'/\[\[(.+?)(?:\|(.+?))?]]/i',
+			static function ( $matches ) {
+				$linkLabel = $matches[2] ?? $matches[1];
+				$linkUrl = preg_replace( '/\s+/', '_', $matches[1] );
+
+				return "[$linkLabel]($linkUrl)";
+			},
+			$summary
+		);
+	}
+
+	/**
 	 * @param string $UUID
 	 * @return string
 	 */
