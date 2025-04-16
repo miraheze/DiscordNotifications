@@ -14,7 +14,7 @@ use MediaWiki\User\UserGroupManager;
 use MediaWiki\User\UserIdentity;
 use MessageLocalizer;
 use WikiPage;
- 
+
 class DiscordNotifier {
 
 	public const CONSTRUCTOR_OPTIONS = [
@@ -295,12 +295,12 @@ class DiscordNotifier {
 	public function getDiscordArticleText( WikiPage $wikiPage, bool $diff = false, string $languageCode = '' ): string {
 		$title = $wikiPage->getTitle();
 		$title_display = $title->getFullText();
-		$article_url = $title->getFullURL();	
+		$article_url = $title->getFullURL();
 		if ( $this->options->get( 'DiscordIncludePageUrls' ) ) {
 			$edit_url = $title->getFullURL( 'action=edit' );
 			$delete_url = $title->getFullURL( 'action=delete' );
 			$history_url = $title->getFullURL( 'action=history' );
-	
+
 			$out = sprintf(
 				'[%s](%s) ([%s](%s) | [%s](%s) | [%s](%s)',
 				$title_display,
@@ -312,13 +312,13 @@ class DiscordNotifier {
 				$this->getMessageInLanguage( 'discordnotifications-history', $languageCode ),
 				$history_url
 			);
-	
+
 			if ( $diff ) {
 				$revisionId = $wikiPage->getRevisionRecord()->getId();
 				$diff_url = $title->getFullURL( [ 'diff' => 'prev', 'oldid' => $revisionId ] );
 				$out .= ' | ' . sprintf( '[%s](%s)', $this->getMessageInLanguage( 'discordnotifications-diff', $languageCode ), $diff_url );
 			}
-	
+
 			$out .= ')';
 			return $out . "\n";
 		} else {
@@ -335,12 +335,12 @@ class DiscordNotifier {
 	 */
 	public function getDiscordTitleText( Title $title ): string {
 		$title_display = $title->getFullText();
-		$article_url = $title->getFullURL();	
+		$article_url = $title->getFullURL();
 		if ( $this->options->get( 'DiscordIncludePageUrls' ) ) {
 			$edit_url = $title->getFullURL( 'action=edit' );
 			$delete_url = $title->getFullURL( 'action=delete' );
 			$history_url = $title->getFullURL( 'action=history' );
-	
+
 			return sprintf(
 				'[%s](%s) ([%s](%s) | [%s](%s) | [%s](%s))',
 				$title_display,
