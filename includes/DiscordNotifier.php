@@ -14,7 +14,7 @@ use MediaWiki\User\UserGroupManager;
 use MediaWiki\User\UserIdentity;
 use MessageLocalizer;
 use WikiPage;
-
+ 
 class DiscordNotifier {
 
 	public const CONSTRUCTOR_OPTIONS = [
