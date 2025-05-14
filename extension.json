@@ -105,7 +105,7 @@
 			"value": "index.php?title="
 		},
 		"DiscordNotificationWikiUrlEndingUserRights": {
-			"value": "Special%3AUserRights&user="
+			"value": "Special:UserRights/"
 		},
 		"DiscordNotificationWikiUrlEndingBlockList": {
 			"value": "Special:BlockList"
