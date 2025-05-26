@@ -77,15 +77,6 @@ class DiscordNotifier {
 		$this->userGroupManager = $userGroupManager;
 	}
 
-	/**
-	 * Sends the message into Discord.
-	 *
-	 * @param string $message
-	 * @param ?UserIdentity $user
-	 * @param string $action
-	 * @param array $embedFields
-	 * @param ?string $webhook
-	 */
 	private function notifyInternal(
 		string $message,
 		?UserIdentity $user,
@@ -93,7 +84,7 @@ class DiscordNotifier {
 		array $embedFields,
 		?string $webhook,
 		?Title $title
-	) {
+	): void {
 		if ( $user && $this->userIsExcluded( $user, $action, (bool)$webhook ) ) {
 			// Don't send notifications if user meets exclude conditions
 			return;
@@ -167,13 +158,7 @@ class DiscordNotifier {
 	}
 
 	/**
-	 * Sends the message into Discord.
-	 *
-	 * @param string $message
-	 * @param ?UserIdentity $user
-	 * @param string $action
-	 * @param array $embedFields
-	 * @param ?string $webhook
+	 * Sends the message into Discord using DeferredUpdates.
 	 */
 	public function notify(
 		string $message,
@@ -182,7 +167,7 @@ class DiscordNotifier {
 		array $embedFields = [],
 		?string $webhook = null,
 		?Title $title = null
-	) {
+	): void {
 		DeferredUpdates::addCallableUpdate(
 			fn () => $this->notifyInternal(
 				$message, $user, $action, $embedFields,
