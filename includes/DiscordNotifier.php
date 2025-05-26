@@ -7,6 +7,7 @@ namespace Miraheze\DiscordNotifications;
 use Flow\Collection\PostCollection;
 use Flow\Model\UUID;
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Title\Title;
@@ -85,7 +86,14 @@ class DiscordNotifier {
 	 * @param array $embedFields
 	 * @param ?string $webhook
 	 */
-	public function notify( string $message, ?UserIdentity $user, string $action, array $embedFields = [], ?string $webhook = null, ?Title $title = null ) {
+	private function notifyInternal(
+		string $message,
+		?UserIdentity $user,
+		string $action,
+		array $embedFields,
+		?string $webhook,
+		?Title $title
+	) {
 		if ( $user && $this->userIsExcluded( $user, $action, (bool)$webhook ) ) {
 			// Don't send notifications if user meets exclude conditions
 			return;
@@ -103,31 +111,14 @@ class DiscordNotifier {
 		$message = preg_replace( '~(<)(http)([^|]*)(\|)([^\>]*)(>)~', '[$5]($2$3)', $message );
 		$message = str_replace( [ "\r", "\n" ], '', $message );
 
-		switch ( $action ) {
-			case 'article_saved':
-			case 'flow':
-			case 'import_complete':
-			case 'user_groups_changed':
-				$color = '2993970';
-				break;
-			case 'article_inserted':
-			case 'file_uploaded':
-			case 'new_user_account':
-				$color = '3580392';
-				break;
-			case 'article_deleted':
-			case 'user_blocked':
-				$color = '15217973';
-				break;
-			case 'article_moved':
-				$color = '14038504';
-				break;
-			case 'article_protected':
-				$color = '3493864';
-				break;
-			default:
-				$color = '11777212';
-		}
+		$color = match ( $action ) {
+			'article_saved', 'flow', 'import_complete', 'user_groups_changed' => '2993970',
+			'article_inserted', 'file_uploaded', 'new_user_account' => '3580392',
+			'article_deleted', 'user_blocked' => '15217973',
+			'article_moved' => '14038504',
+			'article_protected' => '3493864',
+			default => '11777212',
+		};
 
 		$embed = ( new DiscordEmbedBuilder() )
 			->setColor( $color )
@@ -173,6 +164,29 @@ class DiscordNotifier {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Sends the message into Discord.
+	 *
+	 * @param string $message
+	 * @param ?UserIdentity $user
+	 * @param string $action
+	 * @param array $embedFields
+	 * @param ?string $webhook
+	 */
+	public function notify(
+		string $message,
+		?UserIdentity $user,
+		string $action,
+		array $embedFields = [],
+		?string $webhook = null,
+		?Title $title = null
+	) {
+		$args = func_get_args();
+		DeferredUpdates::addCallableUpdate(
+			fn () => $this->notifyInternal( ...$args )
+		);
 	}
 
 	/**
