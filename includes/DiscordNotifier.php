@@ -183,9 +183,11 @@ class DiscordNotifier {
 		?string $webhook = null,
 		?Title $title = null
 	) {
-		$args = func_get_args();
 		DeferredUpdates::addCallableUpdate(
-			fn () => $this->notifyInternal( ...$args )
+			fn () => $this->notifyInternal(
+				$message, $user, $action, $embedFields,
+				$webhook, $title
+			)
 		);
 	}
 
