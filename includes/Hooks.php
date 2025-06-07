@@ -122,6 +122,7 @@ class Hooks implements
 		}
 
 		$summary = strip_tags( $summary );
+		$summary = $this->discordNotifier->parseSummary( $summary );
 
 		$enableExperimentalCVTFeatures = $this->config->get( 'DiscordEnableExperimentalCVTFeatures' ) &&
 				$this->config->get( 'DiscordExperimentalWebhook' );
