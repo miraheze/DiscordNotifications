@@ -8,6 +8,7 @@ use Exception;
 use ManualLogEntry;
 use MediaWiki\Api\APIBase;
 use MediaWiki\Auth\Hook\LocalUserCreatedHook;
+use MediaWiki\Block\DatabaseBlock;
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ConfigFactory;
 use MediaWiki\Context\RequestContext;
@@ -29,6 +30,7 @@ use MediaWiki\Revision\RevisionLookup;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Storage\Hook\PageSaveCompleteHook;
+use MediaWiki\Title\ForeignTitle;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\Hook\UserGroupsChangedHook;
@@ -51,58 +53,21 @@ class Hooks implements
 	UserGroupsChangedHook
 {
 
-	/** @var Config */
-	private $config;
+	private readonly Config $config;
 
-	/** @var DiscordNotifier */
-	private $discordNotifier;
-
-	/** @var RevisionLookup */
-	private $revisionLookup;
-
-	/** @var TitleFactory */
-	private $titleFactory;
-
-	/** @var UserFactory */
-	private $userFactory;
-
-	/** @var UserGroupManager */
-	private $userGroupManager;
-
-	/** @var WikiPageFactory */
-	private $wikiPageFactory;
-
-	/**
-	 * @param ConfigFactory $configFactory
-	 * @param DiscordNotifier $discordNotifier
-	 * @param RevisionLookup $revisionLookup
-	 * @param TitleFactory $titleFactory
-	 * @param UserFactory $userFactory
-	 * @param UserGroupManager $userGroupManager
-	 * @param WikiPageFactory $wikiPageFactory
-	 */
 	public function __construct(
 		ConfigFactory $configFactory,
-		DiscordNotifier $discordNotifier,
-		RevisionLookup $revisionLookup,
-		TitleFactory $titleFactory,
-		UserFactory $userFactory,
-		UserGroupManager $userGroupManager,
-		WikiPageFactory $wikiPageFactory
+		private readonly DiscordNotifier $discordNotifier,
+		private readonly RevisionLookup $revisionLookup,
+		private readonly TitleFactory $titleFactory,
+		private readonly UserFactory $userFactory,
+		private readonly UserGroupManager $userGroupManager,
+		private readonly WikiPageFactory $wikiPageFactory
 	) {
 		$this->config = $configFactory->makeConfig( 'DiscordNotifications' );
-
-		$this->discordNotifier = $discordNotifier;
-		$this->revisionLookup = $revisionLookup;
-		$this->titleFactory = $titleFactory;
-		$this->userFactory = $userFactory;
-		$this->userGroupManager = $userGroupManager;
-		$this->wikiPageFactory = $wikiPageFactory;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function onPageSaveComplete( $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult ) {
 		if ( $editResult->isNullEdit() ) {
 			return;
@@ -287,6 +252,9 @@ class Hooks implements
 
 	/**
 	 * @inheritDoc
+	 * @param int $pageID @phan-unused-param
+	 * @param RevisionRecord $deletedRev @phan-unused-param
+	 * @param int $archivedRevisionCount @phan-unused-param
 	 */
 	public function onPageDeleteComplete( ProperPageIdentity $page, Authority $deleter, string $reason, int $pageID, RevisionRecord $deletedRev, ManualLogEntry $logEntry, int $archivedRevisionCount ) {
 		if ( !$this->config->get( 'DiscordNotificationRemovedArticle' ) ) {
@@ -310,6 +278,11 @@ class Hooks implements
 
 	/**
 	 * @inheritDoc
+	 * @param RevisionRecord $restoredRev @phan-unused-param
+	 * @param ManualLogEntry $logEntry @phan-unused-param
+	 * @param int $restoredRevisionCount @phan-unused-param
+	 * @param bool $created @phan-unused-param
+	 * @param array $restoredPageIds @phan-unused-param
 	 */
 	public function onPageUndeleteComplete(	ProperPageIdentity $page, Authority $restorer, string $reason, RevisionRecord $restoredRev, ManualLogEntry $logEntry, int $restoredRevisionCount, bool $created, array $restoredPageIds ): void {
 		if ( !$this->config->get( 'DiscordNotificationUnremovedArticle' ) ) {
@@ -329,6 +302,9 @@ class Hooks implements
 
 	/**
 	 * @inheritDoc
+	 * @param int $pageid @phan-unused-param
+	 * @param int $redirid @phan-unused-param
+	 * @param RevisionRecord $revision @phan-unused-param
 	 */
 	public function onPageMoveComplete( $old, $new, $user, $pageid, $redirid, $reason, $revision ) {
 		if ( !$this->config->get( 'DiscordNotificationMovedArticle' ) ) {
@@ -345,9 +321,7 @@ class Hooks implements
 		$this->discordNotifier->notify( $message, $user, 'article_moved' );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function onArticleProtectComplete( $wikiPage, $user, $protect, $reason ) {
 		if ( !$this->config->get( 'DiscordNotificationProtectedArticle' ) ) {
 			return;
@@ -365,6 +339,10 @@ class Hooks implements
 
 	/**
 	 * @inheritDoc
+	 * @param ForeignTitle $foreignTitle @phan-unused-param
+	 * @param int $revCount @phan-unused-param
+	 * @param int $sRevCount @phan-unused-param
+	 * @param array $pageInfo @phan-unused-param
 	 */
 	public function onAfterImportPage( $title, $foreignTitle, $revCount, $sRevCount, $pageInfo ) {
 		if ( !$this->config->get( 'DiscordNotificationAfterImportPage' ) ) {
@@ -378,9 +356,7 @@ class Hooks implements
 		$this->discordNotifier->notify( $message, null, 'import_complete' );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function onLocalUserCreated( $user, $autocreated ) {
 		if ( !$this->config->get( 'DiscordNotificationNewUser' ) ) {
 			return;
@@ -463,9 +439,7 @@ class Hooks implements
 		}
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function onUploadComplete( $uploadBase ) {
 		if ( !$this->config->get( 'DiscordNotificationFileUpload' ) ) {
 			return;
@@ -491,6 +465,7 @@ class Hooks implements
 
 	/**
 	 * @inheritDoc
+	 * @param ?DatabaseBlock $priorBlock @phan-unused-param
 	 */
 	public function onBlockIpComplete( $block, $user, $priorBlock ) {
 		if ( !$this->config->get( 'DiscordNotificationBlockedUser' ) ) {
@@ -538,6 +513,10 @@ class Hooks implements
 
 	/**
 	 * @inheritDoc
+	 * @param string[] $added @phan-unused-param
+	 * @param string[] $removed @phan-unused-param
+	 * @param string|false $reason @phan-unused-param
+	 * @param array $newUGMs @phan-unused-param
 	 */
 	public function onUserGroupsChanged( $user, $added, $removed, $performer, $reason, $oldUGMs, $newUGMs ) {
 		if ( !$this->config->get( 'DiscordNotificationUserGroupsChanged' ) ) {
@@ -560,9 +539,7 @@ class Hooks implements
 		$this->discordNotifier->notify( $message, $user, 'user_groups_changed' );
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	/** @inheritDoc */
 	public function onModerationPending( array $fields, $modid ) {
 		if ( !$this->config->get( 'DiscordNotificationModerationPending' ) ) {
 			return;
@@ -586,9 +563,6 @@ class Hooks implements
 		$this->discordNotifier->notify( $message, $user, 'moderation_pending' );
 	}
 
-	/**
-	 * @param APIBase $module
-	 */
 	public function onAPIFlowAfterExecute( APIBase $module ) {
 		if ( !$this->config->get( 'DiscordNotificationFlow' ) || !ExtensionRegistry::getInstance()->isLoaded( 'Flow' ) ) {
 			return;
