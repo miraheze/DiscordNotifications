@@ -262,7 +262,7 @@ class DiscordNotifier {
 			&& !isset( $urlParts['port'] )
 			&& !isset( $urlParts['query'] )
 			&& !isset( $urlParts['fragment'] )
-			&& preg_match( "/^(discord|discordapp)\.com$/", $urlParts['host'] )
+			&& preg_match( "/^(?:canary\.)?(discord|discordapp)\.com$/", $urlParts['host'] )
 			&& preg_match( "#^/api/webhooks/[0-9]+/[a-zA-Z0-9_-]*$#", $urlParts['path'] );
 
 		if ( !$isValid ) {
