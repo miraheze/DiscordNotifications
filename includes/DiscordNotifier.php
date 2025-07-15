@@ -255,6 +255,11 @@ class DiscordNotifier {
 	 * @return bool
 	 */
 	private function isValidWebhookUrl( string $url ): bool {
+		if ( trim( $url ) === '' ) {
+			// skip blank strings without logging
+			return false;
+		}
+
 		$urlParts = $this->urlUtils->parse( $url );
 
 		$isValid = $urlParts !== null
