@@ -1,0 +1,31 @@
+3.1.0
+
+Flow (
+
+Feature:
+* Added support for embedding images on image uploads.
+
+Refactor:
+* BREAKING CHANGE: Individual config variables for action types have been condensed into a single one: DiscordNotificationEnabledActions. This includes:
+** DiscordNotificationNewUser
+** DiscordNotificationBlockedUser
+** DiscordNotificationUserGroupsChanged
+** DiscordNotificationAddedArticle
+** DiscordNotificationRemovedArticle
+** DiscordNotificationUnremovedArticle
+** DiscordNotificationMovedArticle
+** DiscordNotificationEditedArticle
+** DiscordNotificationProtectedArticle
+** DiscordNotificationAfterImportPage
+** DiscordNotificationModerationPending
+** DiscordNotificationFileUpload
+** DiscordNotificationFlow
+* Added property type declarations.
+* Added return types to hook functions.
+* Moved ModerationPending and APIFlowAfterExecute to their own separate handlers.
+* Deduplicated DiscordNotifier::getDiscordUserText() code.
+
+Fix:
+* Set DiscordNotificationShowSuppressed to false by default.
+* DiscordNotifier::parseurl() no longer parses out unnecessary symbols, causing broken URLs.
+* Skip notifying imports when no revisions were imported.

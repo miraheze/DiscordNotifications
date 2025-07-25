@@ -1,6 +1,6 @@
 {
 	"name": "DiscordNotifications",
-	"version": "3.0.0",
+	"version": "3.1.0",
 	"author": "Universal Omega",
 	"url": "https://github.com/miraheze/DiscordNotifications",
 	"descriptionmsg": "discordnotifications-desc",
@@ -23,7 +23,7 @@
 	},
 	"HookHandlers": {
 		"main": {
-			"class": "Miraheze\\DiscordNotifications\\Hooks",
+			"class": "Miraheze\\DiscordNotifications\\Hooks\\Hooks",
 			"services": [
 				"ConfigFactory",
 				"DiscordNotifier",
@@ -32,6 +32,15 @@
 				"UserFactory",
 				"UserGroupManager",
 				"WikiPageFactory"
+			]
+		},
+		"ModerationHooks": {
+			"class": "Miraheze\\DiscordNotifications\\Hooks\\ModerationHooks",
+			"services": [
+				"ConfigFactory",
+				"DiscordNotifier",
+				"TitleFactory",
+				"UserFactory"
 			]
 		}
 	},
@@ -60,9 +69,6 @@
 		"UserGroupsChanged": {
 			"handler": "main"
 		},
-		"APIFlowAfterExecute": {
-			"handler": "main"
-		},
 		"AfterImportPage": {
 			"handler": "main"
 		},
@@ -70,7 +76,7 @@
 			"handler": "main"
 		},
 		"ModerationPending": {
-			"handler": "main"
+			"handler": "ModerationHooks"
 		}
 	},
 	"config": {
@@ -143,49 +149,29 @@
 		"DiscordNotificationWikiUrlEndingDiff": {
 			"value": "&diff=prev&oldid="
 		},
-		"DiscordNotificationNewUser": {
-			"value": true
+		"DiscordNotificationEnabledActions": {
+			"value": {
+				"AddedArticle": true,
+				"EditedArticle": true,
+				"MovedArticle": true,
+				"ProtectedArticle": true,
+				"RemovedArticle": true,
+				"UnremovedArticle": true,
+				"AfterImportPage": true,
+				"FileUpload": true,
+				"BlockedUser": true,
+				"NewUser": true,
+				"UserGroupsChanged": true,
+				"ModerationPending": true
+			}
 		},
-		"DiscordNotificationBlockedUser": {
-			"value": true
-		},
-		"DiscordNotificationAddedArticle": {
-			"value": true
-		},
-		"DiscordNotificationRemovedArticle": {
-			"value": true
-		},
-		"DiscordNotificationUnremovedArticle": {
-			"value": true
-		},
-		"DiscordNotificationMovedArticle": {
-			"value": true
-		},
-		"DiscordNotificationEditedArticle": {
-			"value": true
-		},
-		"DiscordNotificationFileUpload": {
-			"value": true
-		},
-		"DiscordNotificationProtectedArticle": {
+		"DiscordNotificationShowImage": {
 			"value": true
 		},
 		"DiscordNotificationShowSuppressed": {
-			"value": true
-		},
-		"DiscordNotificationUserGroupsChanged": {
-			"value": true
-		},
-		"DiscordNotificationFlow": {
-			"value": true
-		},
-		"DiscordNotificationAfterImportPage": {
-			"value": true
+			"value": false
 		},
 		"DiscordNotificationIncludeAutocreatedUsers": {
-			"value": true
-		},
-		"DiscordNotificationModerationPending": {
 			"value": true
 		},
 		"DiscordIncludeDiffSize": {

@@ -2,7 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Aleksi Postari",
-			"Asko",
+			"pskyechology",
 			"Universal Omega"
 		]
 	},
@@ -41,23 +41,6 @@
 	"discordnotifications-view-user-rights": "View or manage user rights",
 	"discordnotifications-change-user-groups": "%s has changed user groups for %s. New groups: %s",
 	"discordnotifications-change-user-groups-with-old": "$1 has changed user groups for $2. Old groups: $3. New groups: $4",
-	"discordnotifications-flow-edit-header": "💬 $1 has edited a board description $2",
-	"discordnotifications-flow-edit-post": "💬 $1 has edited a post on $2",
-	"discordnotifications-flow-edit-title": "💬 $1 has changed the topic title to $2 on $3",
-	"discordnotifications-flow-edit-topic-summary": "💬 $1 has edited topic summary on $2",
-	"discordnotifications-flow-lock-topic": "💬 $1 has $2 the topic $3",
-	"discordnotifications-flow-lock-topic-lock": "resolved",
-	"discordnotifications-flow-lock-topic-unlock": "reopened",
-	"discordnotifications-flow-moderate-post": "💬 $1 has $2 a post on topic $3",
-	"discordnotifications-flow-moderate-topic": "💬 $1 has $2 the topic $3",
-	"discordnotifications-flow-moderate-hide": "hidden",
-	"discordnotifications-flow-moderate-unhide": "unhidden",
-	"discordnotifications-flow-moderate-suppress": "suppressed",
-	"discordnotifications-flow-moderate-unsuppress": "unsuppressed",
-	"discordnotifications-flow-moderate-delete": "deleted",
-	"discordnotifications-flow-moderate-undelete": "undeleted",
-	"discordnotifications-flow-new-topic": "💬 $1 has created topic $2 on $3",
-	"discordnotifications-flow-reply": "💬 $1 has replied in $2",
 	"discordnotifications-import-complete": "⤵️ Article $1 has been imported.",
 	"discordnotifications-moderation-pending": "🔍 $1 has submitted an edit for $2 to the [moderation queue]($3)."
 }

@@ -2,11 +2,10 @@
 
 declare( strict_types = 1 );
 
-namespace Miraheze\DiscordNotifications;
+namespace Miraheze\DiscordNotifications\Hooks;
 
 use Exception;
 use ManualLogEntry;
-use MediaWiki\Api\APIBase;
 use MediaWiki\Auth\Hook\LocalUserCreatedHook;
 use MediaWiki\Block\DatabaseBlock;
 use MediaWiki\Config\Config;
@@ -25,18 +24,17 @@ use MediaWiki\Page\Hook\PageUndeleteCompleteHook;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Permissions\Authority;
-use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\RevisionLookup;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Storage\Hook\PageSaveCompleteHook;
 use MediaWiki\Title\ForeignTitle;
-use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\Hook\UserGroupsChangedHook;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserGroupManager;
 use MediaWiki\User\UserIdentityValue;
+use Miraheze\DiscordNotifications\DiscordNotifier;
 use TextSlotDiffRenderer;
 use Wikimedia\IPUtils;
 
@@ -68,18 +66,18 @@ class Hooks implements
 	}
 
 	/** @inheritDoc */
-	public function onPageSaveComplete( $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult ) {
+	public function onPageSaveComplete( $wikiPage, $user, $summary, $flags, $revisionRecord, $editResult ): void {
 		if ( $editResult->isNullEdit() ) {
 			return;
 		}
 
 		$isNew = (bool)( $flags & EDIT_NEW );
 
-		if ( !$this->config->get( 'DiscordNotificationEditedArticle' ) && !$isNew ) {
+		if ( !$this->config->get( 'DiscordNotificationEnabledActions' )['EditedArticle'] && !$isNew ) {
 			return;
 		}
 
-		if ( !$this->config->get( 'DiscordNotificationAddedArticle' ) && $isNew ) {
+		if ( !$this->config->get( 'DiscordNotificationEnabledActions' )['AddedArticle'] && $isNew ) {
 			return;
 		}
 
@@ -256,8 +254,8 @@ class Hooks implements
 	 * @param RevisionRecord $deletedRev @phan-unused-param
 	 * @param int $archivedRevisionCount @phan-unused-param
 	 */
-	public function onPageDeleteComplete( ProperPageIdentity $page, Authority $deleter, string $reason, int $pageID, RevisionRecord $deletedRev, ManualLogEntry $logEntry, int $archivedRevisionCount ) {
-		if ( !$this->config->get( 'DiscordNotificationRemovedArticle' ) ) {
+	public function onPageDeleteComplete( ProperPageIdentity $page, Authority $deleter, string $reason, int $pageID, RevisionRecord $deletedRev, ManualLogEntry $logEntry, int $archivedRevisionCount ): void {
+		if ( !$this->config->get( 'DiscordNotificationEnabledActions' )['RemovedArticle'] ) {
 			return;
 		}
 
@@ -285,7 +283,7 @@ class Hooks implements
 	 * @param array $restoredPageIds @phan-unused-param
 	 */
 	public function onPageUndeleteComplete(	ProperPageIdentity $page, Authority $restorer, string $reason, RevisionRecord $restoredRev, ManualLogEntry $logEntry, int $restoredRevisionCount, bool $created, array $restoredPageIds ): void {
-		if ( !$this->config->get( 'DiscordNotificationUnremovedArticle' ) ) {
+		if ( !$this->config->get( 'DiscordNotificationEnabledActions' )['UnremovedArticle'] ) {
 			return;
 		}
 
@@ -306,8 +304,8 @@ class Hooks implements
 	 * @param int $redirid @phan-unused-param
 	 * @param RevisionRecord $revision @phan-unused-param
 	 */
-	public function onPageMoveComplete( $old, $new, $user, $pageid, $redirid, $reason, $revision ) {
-		if ( !$this->config->get( 'DiscordNotificationMovedArticle' ) ) {
+	public function onPageMoveComplete( $old, $new, $user, $pageid, $redirid, $reason, $revision ): void {
+		if ( !$this->config->get( 'DiscordNotificationEnabledActions' )['MovedArticle'] ) {
 			return;
 		}
 
@@ -322,8 +320,8 @@ class Hooks implements
 	}
 
 	/** @inheritDoc */
-	public function onArticleProtectComplete( $wikiPage, $user, $protect, $reason ) {
-		if ( !$this->config->get( 'DiscordNotificationProtectedArticle' ) ) {
+	public function onArticleProtectComplete( $wikiPage, $user, $protect, $reason ): void {
+		if ( !$this->config->get( 'DiscordNotificationEnabledActions' )['ProtectedArticle'] ) {
 			return;
 		}
 
@@ -341,11 +339,14 @@ class Hooks implements
 	 * @inheritDoc
 	 * @param ForeignTitle $foreignTitle @phan-unused-param
 	 * @param int $revCount @phan-unused-param
-	 * @param int $sRevCount @phan-unused-param
 	 * @param array $pageInfo @phan-unused-param
 	 */
-	public function onAfterImportPage( $title, $foreignTitle, $revCount, $sRevCount, $pageInfo ) {
-		if ( !$this->config->get( 'DiscordNotificationAfterImportPage' ) ) {
+	public function onAfterImportPage( $title, $foreignTitle, $revCount, $sRevCount, $pageInfo ): void {
+		if ( !$this->config->get( 'DiscordNotificationEnabledActions' )['AfterImportPage'] ) {
+			return;
+		}
+
+		if ( $sRevCount == 0 ) {
 			return;
 		}
 
@@ -357,8 +358,8 @@ class Hooks implements
 	}
 
 	/** @inheritDoc */
-	public function onLocalUserCreated( $user, $autocreated ) {
-		if ( !$this->config->get( 'DiscordNotificationNewUser' ) ) {
+	public function onLocalUserCreated( $user, $autocreated ): void {
+		if ( !$this->config->get( 'DiscordNotificationEnabledActions' )['NewUser'] ) {
 			return;
 		}
 
@@ -440,10 +441,11 @@ class Hooks implements
 	}
 
 	/** @inheritDoc */
-	public function onUploadComplete( $uploadBase ) {
-		if ( !$this->config->get( 'DiscordNotificationFileUpload' ) ) {
+	public function onUploadComplete( $uploadBase ): void {
+		if ( !$this->config->get( 'DiscordNotificationEnabledActions' )['FileUpload'] ) {
 			return;
 		}
+		$showImage = ( $this->config->get( 'DiscordNotificationShowImage' ) );
 
 		$localFile = $uploadBase->getLocalFile();
 
@@ -460,15 +462,15 @@ class Hooks implements
 			strip_tags( $localFile->getDescription() )
 		);
 
-		$this->discordNotifier->notify( $message, $user, 'file_uploaded' );
+		$this->discordNotifier->notify( $message, $user, 'file_uploaded', imageUrl: $localFile->getFullUrl() ?: $showImage );
 	}
 
 	/**
 	 * @inheritDoc
 	 * @param ?DatabaseBlock $priorBlock @phan-unused-param
 	 */
-	public function onBlockIpComplete( $block, $user, $priorBlock ) {
-		if ( !$this->config->get( 'DiscordNotificationBlockedUser' ) ) {
+	public function onBlockIpComplete( $block, $user, $priorBlock ): void {
+		if ( !$this->config->get( 'DiscordNotificationEnabledActions' )['BlockedUser'] ) {
 			return;
 		}
 
@@ -518,8 +520,8 @@ class Hooks implements
 	 * @param string|false $reason @phan-unused-param
 	 * @param array $newUGMs @phan-unused-param
 	 */
-	public function onUserGroupsChanged( $user, $added, $removed, $performer, $reason, $oldUGMs, $newUGMs ) {
-		if ( !$this->config->get( 'DiscordNotificationUserGroupsChanged' ) ) {
+	public function onUserGroupsChanged( $user, $added, $removed, $performer, $reason, $oldUGMs, $newUGMs ): void {
+		if ( !$this->config->get( 'DiscordNotificationEnabledActions' )['UserGroupsChanged'] ) {
 			return;
 		}
 
@@ -537,140 +539,5 @@ class Hooks implements
 		);
 
 		$this->discordNotifier->notify( $message, $user, 'user_groups_changed' );
-	}
-
-	/** @inheritDoc */
-	public function onModerationPending( array $fields, $modid ) {
-		if ( !$this->config->get( 'DiscordNotificationModerationPending' ) ) {
-			return;
-		}
-
-		$user = $this->userFactory->newFromId( $fields['mod_user'] );
-		$pageTitle = $this->titleFactory->newFromTextThrow( $fields['mod_title'] );
-		$moderationURL = $this->titleFactory->newFromText( 'Special:Moderation' )->getFullURL();
-
-		$previewLinkEnabled = $this->config->get( 'ModerationPreviewLink' );
-
-		$message = $this->discordNotifier->getMessage( 'discordnotifications-moderation-pending',
-			$this->discordNotifier->getDiscordUserText( $user ),
-			$this->discordNotifier->getDiscordModerationTitleText( $pageTitle, $modid, $previewLinkEnabled ),
-			$moderationURL
-		);
-
-		$message .= ' (' . $this->discordNotifier->getMessage( 'discordnotifications-bytes',
-			sprintf( '%+d', $fields['mod_new_len'] - $fields['mod_old_len'] ) ) . ')';
-
-		$this->discordNotifier->notify( $message, $user, 'moderation_pending' );
-	}
-
-	public function onAPIFlowAfterExecute( APIBase $module ) {
-		if ( !$this->config->get( 'DiscordNotificationFlow' ) || !ExtensionRegistry::getInstance()->isLoaded( 'Flow' ) ) {
-			return;
-		}
-
-		$request = RequestContext::getMain()->getRequest();
-
-		$action = $module->getModuleName();
-		$request = $request->getValues();
-		$result = $module->getResult()->getResultData()['flow'][$action];
-
-		if ( $result['status'] != 'ok' ) {
-			return;
-		}
-
-		$title = Title::newFromText( $request['page'] );
-		$user = RequestContext::getMain()->getUser();
-
-		switch ( $action ) {
-			case 'edit-header':
-				$message = $this->discordNotifier->getMessage( 'discordnotifications-flow-edit-header',
-					$this->discordNotifier->getDiscordUserText( $user ),
-					'<' . $this->discordNotifier->parseurl( $this->config->get( 'DiscordNotificationWikiUrl' ) . $this->config->get( 'DiscordNotificationWikiUrlEnding' ) . $request['page'] ) . '|' . $request['page'] . '>'
-				);
-
-				break;
-			case 'edit-post':
-				$message = $this->discordNotifier->getMessage( 'discordnotifications-flow-edit-post',
-					$this->discordNotifier->getDiscordUserText( $user ),
-					'<' . $this->discordNotifier->parseurl( $this->config->get( 'DiscordNotificationWikiUrl' ) . $this->config->get( 'DiscordNotificationWikiUrlEnding' ) . 'Topic:' . $result['workflow'] ) . '|' . $this->discordNotifier->flowUUIDToTitleText( $result['workflow'] ) . '>'
-				);
-
-				break;
-			case 'edit-title':
-				$message = $this->discordNotifier->getMessage( 'discordnotifications-flow-edit-title',
-					$this->discordNotifier->getDiscordUserText( $user ),
-					$request['etcontent'],
-					'<' . $this->discordNotifier->parseurl( $this->config->get( 'DiscordNotificationWikiUrl' ) . $this->config->get( 'DiscordNotificationWikiUrlEnding' ) . 'Topic:' . $result['workflow'] ) . '|' . $this->discordNotifier->flowUUIDToTitleText( $result['workflow'] ) . '>'
-				);
-
-				break;
-			case 'edit-topic-summary':
-				$message = $this->discordNotifier->getMessage( 'discordnotifications-flow-edit-topic-summary',
-					$this->discordNotifier->getDiscordUserText( $user ),
-					'<' . $this->discordNotifier->parseurl( $this->config->get( 'DiscordNotificationWikiUrl' ) . $this->config->get( 'DiscordNotificationWikiUrlEnding' ) . 'Topic:' . $result['workflow'] ) . '|' . $this->discordNotifier->flowUUIDToTitleText( $result['workflow'] ) . '>'
-				);
-
-				break;
-			case 'lock-topic':
-				$message = $this->discordNotifier->getMessage( 'discordnotifications-flow-lock-topic',
-					$this->discordNotifier->getDiscordUserText( $user ),
-					// Messages that can be used here:
-					// * discordnotifications-flow-lock-topic-lock
-					// * discordnotifications-flow-lock-topic-unlock
-					$this->discordNotifier->getMessage( 'discordnotifications-flow-lock-topic-' . $request['cotmoderationState'] ),
-					'<' . $this->discordNotifier->parseurl( $this->config->get( 'DiscordNotificationWikiUrl' ) . $this->config->get( 'DiscordNotificationWikiUrlEnding' ) . $request['page'] ) . '|' . $this->discordNotifier->flowUUIDToTitleText( $result['workflow'] ) . '>'
-				);
-
-				break;
-			case 'moderate-post':
-				$message = $this->discordNotifier->getMessage( 'discordnotifications-flow-moderate-post',
-					$this->discordNotifier->getDiscordUserText( $user ),
-					// Messages that can be used here:
-					// * discordnotifications-flow-moderate-hide
-					// * discordnotifications-flow-moderate-unhide
-					// * discordnotifications-flow-moderate-suppress
-					// * discordnotifications-flow-moderate-unsuppress
-					// * discordnotifications-flow-moderate-delete
-					// * discordnotifications-flow-moderate-undelete
-					$this->discordNotifier->getMessage( 'discordnotifications-flow-moderate-' . $request['mpmoderationState'] ),
-					'<' . $this->discordNotifier->parseurl( $this->config->get( 'DiscordNotificationWikiUrl' ) . $this->config->get( 'DiscordNotificationWikiUrlEnding' ) . $request['page'] ) . '|' . $this->discordNotifier->flowUUIDToTitleText( $result['workflow'] ) . '>'
-				);
-
-				break;
-			case 'moderate-topic':
-				$message = $this->discordNotifier->getMessage( 'discordnotifications-flow-moderate-topic',
-					$this->discordNotifier->getDiscordUserText( $user ),
-					// Messages that can be used here:
-					// * discordnotifications-flow-moderate-hide
-					// * discordnotifications-flow-moderate-unhide
-					// * discordnotifications-flow-moderate-suppress
-					// * discordnotifications-flow-moderate-unsuppress
-					// * discordnotifications-flow-moderate-delete
-					// * discordnotifications-flow-moderate-undelete
-					$this->discordNotifier->getMessage( 'discordnotifications-flow-moderate-' . $request['mtmoderationState'] ),
-					'<' . $this->discordNotifier->parseurl( $this->config->get( 'DiscordNotificationWikiUrl' ) . $this->config->get( 'DiscordNotificationWikiUrlEnding' ) . $request['page'] ) . '|' . $this->discordNotifier->flowUUIDToTitleText( $result['workflow'] ) . '>'
-				);
-
-				break;
-			case 'new-topic':
-				$message = $this->discordNotifier->getMessage( 'discordnotifications-flow-new-topic',
-					$this->discordNotifier->getDiscordUserText( $user ),
-					'<' . $this->discordNotifier->parseurl( $this->config->get( 'DiscordNotificationWikiUrl' ) . $this->config->get( 'DiscordNotificationWikiUrlEnding' ) . 'Topic:' . $result['committed']['topiclist']['topic-id'] ) . '|' . $request['nttopic'] . '>',
-					'<' . $this->discordNotifier->parseurl( $this->config->get( 'DiscordNotificationWikiUrl' ) . $this->config->get( 'DiscordNotificationWikiUrlEnding' ) . $request['page'] ) . '|' . $request['page'] . '>'
-				);
-
-				break;
-			case 'reply':
-				$message = $this->discordNotifier->getMessage( 'discordnotifications-flow-reply',
-					$this->discordNotifier->getDiscordUserText( $user ),
-					'<' . $this->discordNotifier->parseurl( $this->config->get( 'DiscordNotificationWikiUrl' ) . $this->config->get( 'DiscordNotificationWikiUrlEnding' ) . 'Topic:' . $result['workflow'] ) . '|' . $this->discordNotifier->flowUUIDToTitleText( $result['workflow'] ) . '>'
-				);
-
-				break;
-			default:
-				return;
-		}
-
-		$this->discordNotifier->notify( $message, $user, 'flow', [], null, $title );
 	}
 }
