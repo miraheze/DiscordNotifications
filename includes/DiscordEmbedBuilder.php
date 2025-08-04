@@ -11,77 +11,77 @@ class DiscordEmbedBuilder {
 	 *
 	 * @var string
 	 */
-	private $title;
+	private string $title;
 
 	/**
 	 * The description of the embed.
 	 *
 	 * @var string
 	 */
-	private $description;
+	private string $description;
 
 	/**
 	 * The color of the embed.
 	 *
 	 * @var string
 	 */
-	private $color;
+	private string $color;
 
 	/**
 	 * The username to display with the embed.
 	 *
 	 * @var string
 	 */
-	private $username;
+	private string $username;
 
 	/**
 	 * The URL of the embed.
 	 *
 	 * @var string
 	 */
-	private $url;
+	private string $url;
 
 	/**
 	 * The URL of the avatar to display with the embed.
 	 *
 	 * @var string
 	 */
-	private $avatarUrl;
+	private string $avatarUrl;
 
 	/**
 	 * The timestamp of the embed.
 	 *
 	 * @var string
 	 */
-	private $timestamp;
+	private string $timestamp;
 
 	/**
 	 * The image of the embed.
 	 *
 	 * @var array
 	 */
-	private $image;
+	private array $image;
 
 	/**
 	 * The thumbnail of the embed.
 	 *
 	 * @var array
 	 */
-	private $thumbnail;
+	private array $thumbnail;
 
 	/**
 	 * The author of the embed.
 	 *
 	 * @var array
 	 */
-	private $author;
+	private array $author;
 
 	/**
 	 * The footer of the embed.
 	 *
 	 * @var array
 	 */
-	private $footer;
+	private array $footer;
 
 	/**
 	 * The fields of the embed.

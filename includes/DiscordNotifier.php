@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace Miraheze\DiscordNotifications;
 
-use Flow\Collection\PostCollection;
-use Flow\Model\UUID;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Deferred\DeferredUpdates;
 use MediaWiki\Logger\LoggerFactory;
@@ -49,22 +47,22 @@ class DiscordNotifier {
 	];
 
 	/** @var MessageLocalizer */
-	private $messageLocalizer;
+	private MessageLocalizer $messageLocalizer;
 
 	/** @var ServiceOptions */
-	private $options;
+	private ServiceOptions $options;
 
 	/** @var PermissionManager */
-	private $permissionManager;
+	private PermissionManager $permissionManager;
 
 	/** @var UserGroupManager */
-	private $userGroupManager;
+	private UserGroupManager $userGroupManager;
 
 	/** @var UrlUtils */
-	private $urlUtils;
+	private UrlUtils $urlUtils;
 
 	/** @var LoggerInterface */
-	private $logger;
+	private LoggerInterface $logger;
 
 	/**
 	 * @param MessageLocalizer $messageLocalizer
@@ -96,7 +94,8 @@ class DiscordNotifier {
 		string $action,
 		array $embedFields,
 		?string $webhook,
-		?Title $title
+		?Title $title,
+		?string $imageUrl
 	): void {
 		if ( $user && $this->userIsExcluded( $user, $action, (bool)$webhook ) ) {
 			// Don't send notifications if user meets exclude conditions
@@ -116,7 +115,7 @@ class DiscordNotifier {
 		$message = str_replace( [ "\r", "\n" ], '', $message );
 
 		$color = match ( $action ) {
-			'article_saved', 'flow', 'import_complete', 'user_groups_changed', 'moderation_pending' => '2993970',
+			'article_saved', 'import_complete', 'user_groups_changed', 'moderation_pending' => '2993970',
 			'article_inserted', 'file_uploaded', 'new_user_account' => '3580392',
 			'article_deleted', 'user_blocked' => '15217973',
 			'article_undeleted' => '15263797',
@@ -146,6 +145,11 @@ class DiscordNotifier {
 		// Temporary
 		if ( !$this->options->get( 'DiscordDisableEmbedFooter' ) || $webhook ) {
 			$embed->setFooter( 'DiscordNotifications v3' );
+		}
+
+		if ( $imageUrl ) {
+			$imageUrl = $this->parseurl( $imageUrl );
+			$embed->setImage( $imageUrl );
 		}
 
 		$post = $embed->build();
@@ -180,12 +184,13 @@ class DiscordNotifier {
 		string $action,
 		array $embedFields = [],
 		?string $webhook = null,
-		?Title $title = null
+		?Title $title = null,
+		?string $imageUrl = null
 	): void {
 		DeferredUpdates::addCallableUpdate(
 			fn () => $this->notifyInternal(
 				$message, $user, $action, $embedFields,
-				$webhook, $title
+				$webhook, $title, $imageUrl
 			)
 		);
 	}
@@ -194,7 +199,7 @@ class DiscordNotifier {
 	 * @param string $url
 	 * @param string $postData
 	 */
-	private function sendCurlRequest( string $url, string $postData ) {
+	private function sendCurlRequest( string $url, string $postData ): void {
 		if ( !$this->isValidWebhookUrl( $url ) ) {
 			return;
 		}
@@ -231,7 +236,7 @@ class DiscordNotifier {
 	 * @param string $url
 	 * @param string $postData
 	 */
-	private function sendHttpRequest( string $url, string $postData ) {
+	private function sendHttpRequest( string $url, string $postData ): void {
 		if ( !$this->isValidWebhookUrl( $url ) ) {
 			return;
 		}
@@ -284,12 +289,7 @@ class DiscordNotifier {
 	 * @return string
 	 */
 	public function parseurl( string $url ): string {
-		$url = str_replace( ' ', '_', $url );
-		$url = str_replace( '(', '%28', $url );
-		$url = str_replace( ')', '%29', $url );
-		$url = str_replace( '?', '%3F', $url );
-
-		return $url;
+		return str_replace( ' ', '_', $url );
 	}
 
 	/**
@@ -302,19 +302,20 @@ class DiscordNotifier {
 	 * @return string
 	 */
 	public function getDiscordUserText( $user, string $languageCode = '', bool $includeCentralAuthUrl = false ): string {
+		$wikiUrl = $this->options->get( 'DiscordNotificationWikiUrl' ) . $this->options->get( 'DiscordNotificationWikiUrlEnding' );
+
 		$userName = $user->getName();
 		$user_url = str_replace( '&', '%26', $userName );
-
 		$userName = str_replace( '>', '\>', $userName );
 
 		if ( $this->options->get( 'DiscordIncludeUserUrls' ) ) {
 			$userUrls = sprintf(
 				'%s (%s | %s | %s | %s',
-				'<' . $this->parseurl( $this->options->get( 'DiscordNotificationWikiUrl' ) . $this->options->get( 'DiscordNotificationWikiUrlEnding' ) . $this->options->get( 'DiscordNotificationWikiUrlEndingUserPage' ) . $user_url ) . '|' . $userName . '>',
-				'<' . $this->parseurl( $this->options->get( 'DiscordNotificationWikiUrl' ) . $this->options->get( 'DiscordNotificationWikiUrlEnding' ) . $this->options->get( 'DiscordNotificationWikiUrlEndingBlockUser' ) . $user_url ) . '|' . $this->getMessageInLanguage( 'discordnotifications-block', $languageCode ) . '>',
-				'<' . $this->parseurl( $this->options->get( 'DiscordNotificationWikiUrl' ) . $this->options->get( 'DiscordNotificationWikiUrlEnding' ) . $this->options->get( 'DiscordNotificationWikiUrlEndingUserRights' ) . $user_url ) . '|' . $this->getMessageInLanguage( 'discordnotifications-groups', $languageCode ) . '>',
-				'<' . $this->parseurl( $this->options->get( 'DiscordNotificationWikiUrl' ) . $this->options->get( 'DiscordNotificationWikiUrlEnding' ) . $this->options->get( 'DiscordNotificationWikiUrlEndingUserTalkPage' ) . $user_url ) . '|' . $this->getMessageInLanguage( 'discordnotifications-talk', $languageCode ) . '>',
-				'<' . $this->parseurl( $this->options->get( 'DiscordNotificationWikiUrl' ) . $this->options->get( 'DiscordNotificationWikiUrlEnding' ) . $this->options->get( 'DiscordNotificationWikiUrlEndingUserContributions' ) . $user_url ) . '|' . $this->getMessageInLanguage( 'discordnotifications-contribs', $languageCode ) . '>'
+				'<' . $this->parseurl( $wikiUrl . $this->options->get( 'DiscordNotificationWikiUrlEndingUserPage' ) . $user_url ) . '|' . $userName . '>',
+				'<' . $this->parseurl( $wikiUrl . $this->options->get( 'DiscordNotificationWikiUrlEndingBlockUser' ) . $user_url ) . '|' . $this->getMessageInLanguage( 'discordnotifications-block', $languageCode ) . '>',
+				'<' . $this->parseurl( $wikiUrl . $this->options->get( 'DiscordNotificationWikiUrlEndingUserRights' ) . $user_url ) . '|' . $this->getMessageInLanguage( 'discordnotifications-groups', $languageCode ) . '>',
+				'<' . $this->parseurl( $wikiUrl . $this->options->get( 'DiscordNotificationWikiUrlEndingUserTalkPage' ) . $user_url ) . '|' . $this->getMessageInLanguage( 'discordnotifications-talk', $languageCode ) . '>',
+				'<' . $this->parseurl( $wikiUrl . $this->options->get( 'DiscordNotificationWikiUrlEndingUserContributions' ) . $user_url ) . '|' . $this->getMessageInLanguage( 'discordnotifications-contribs', $languageCode ) . '>'
 			);
 
 			if (
@@ -330,7 +331,7 @@ class DiscordNotifier {
 
 			return $userUrls;
 		} else {
-			return '<' . $this->parseurl( $this->options->get( 'DiscordNotificationWikiUrl' ) . $this->options->get( 'DiscordNotificationWikiUrlEnding' ) . $this->options->get( 'DiscordNotificationWikiUrlEndingUserPage' ) . $user_url ) . '|' . $userName . '>';
+			return '<' . $this->parseurl( $wikiUrl . $this->options->get( 'DiscordNotificationWikiUrlEndingUserPage' ) . $user_url ) . '|' . $userName . '>';
 		}
 	}
 
@@ -824,17 +825,5 @@ class DiscordNotifier {
 
 		return str_replace( array_keys( $replacements ), array_values( $replacements ),
 			strip_tags( $diff ) );
-	}
-
-	/**
-	 * @param string $UUID
-	 * @return string
-	 */
-	public function flowUUIDToTitleText( string $UUID ): string {
-		$UUID = UUID::create( $UUID );
-		$collection = PostCollection::newFromId( $UUID );
-		$revision = $collection->getLastRevision();
-
-		return $revision->getContent( 'topic-title-plaintext' );
 	}
 }

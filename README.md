@@ -26,7 +26,7 @@ Want to translate this extension to your language? Just visit [translatewiki.net
 ## Requirements
 
 * [cURL](http://curl.haxx.se/) or ability to use PHP function `file_get_contents` for sending the data. Defaults to cURL. See the configuration parameter `$wgDiscordSendMethod` below to switch between cURL and file_get_contents.
-* MediaWiki 1.41+
+* MediaWiki 1.43+
 * Apache should have NE (NoEscape) flag on to prevent issues in URLs. By default, you should have this enabled.
 
 ## How to install
@@ -178,7 +178,6 @@ $wgDiscordExcludeConditions = [
  * article_protected: action for when an article is protected
  * article_saved: action for when an article is edited (supports experimental)
  * file_uploaded: action for when a file is uploaded
- * flow: action for when a change to a flow topic is executed
  * import_complete: action for when an article is successfully imported
  * new_user_account: action for when a new user account is created (supports experimental)
  * user_blocked: action for when a user is blocked (supports experimental)
@@ -258,7 +257,6 @@ $wgDiscordExcludeConditions = [
  * article_deleted: action for when an article is deleted
  * article_inserted: action for when an article is created (supports experimental)
  * article_saved: action for when an article is edited (supports experimental)
- * flow: action for when a change to a flow topic is executed
  */
 ```
 
@@ -275,41 +273,44 @@ $wgDiscordNotificationShowSuppressed = true;
 MediaWiki actions that will be sent notifications of into Discord. Set desired options to false to disable notifications of those actions.
 
 ```php
+// Article added to MediaWiki
+$wgDiscordNotificationEnabledActions["AddedArticle"] = true;
+
+// Article edited in MediaWiki
+$wgDiscordNotificationEnabledActions["EditedArticle"] = true;
+
+// Article moved under a new title in MediaWiki
+$wgDiscordNotificationEnabledActions["MovedArticle"] = true;
+
+// Article protection settings changed
+$wgDiscordNotificationEnabledActions["ProtectedArticle"] = true;
+
+// Article removed from MediaWiki
+$wgDiscordNotificationEnabledActions["RemovedArticle"] = true;
+
+// Articled unremoved from MediaWiki
+$wgDiscordNotificationEnabledActions["UnremovedArticle"] = true;
+
+// Article has been imported
+$wgDiscordNotificationEnabledActions["AfterImportPage"] = true;
+
+// File uploaded
+$wgDiscordNotificationEnabledActions["FileUpload"] = true;
+
+// User or IP blocked in MediaWiki
+$wgDiscordNotificationEnabledActions["BlockedUser"] = true;
+
 // New user added to MediaWiki
-$wgDiscordNotificationNewUser = true;
+$wgDiscordNotificationEnabledActions["NewUser"] = true;
 
 // Autocreated users
 $wgDiscordNotificationIncludeAutocreatedUsers = true;
 
-// User or IP blocked in MediaWiki
-$wgDiscordNotificationBlockedUser = true;
-
 // User groups changed in MediaWiki
-$wgDiscordNotificationUserGroupsChanged = true;
+$wgDiscordNotificationEnabledActions["UserGroupsChanged"] = true;
 
-// Article added to MediaWiki
-$wgDiscordNotificationAddedArticle = true;
-
-// Article removed from MediaWiki
-$wgDiscordNotificationRemovedArticle = true;
-
-// Article moved under a new title in MediaWiki
-$wgDiscordNotificationMovedArticle = true;
-
-// Article edited in MediaWiki
-$wgDiscordNotificationEditedArticle = true;
-
-// File uploaded
-$wgDiscordNotificationFileUpload = true;
-
-// Article protection settings changed
-$wgDiscordNotificationProtectedArticle = true;
-
-// Action on Flow Boards (experimental)
-$wgDiscordNotificationFlow = true;
-
-// Article has been imported
-$wgDiscordNotificationAfterImportPage = true;
+// Edit has been sent to the moderation queue (Extension:Moderation)
+$wgDiscordNotificationEnabledActions["ModerationPending"] = true;
 ```
 
 ## Additional MediaWiki URL Settings

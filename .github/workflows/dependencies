@@ -1,6 +1,3 @@
 CentralAuth:
   branch: auto
   repo: auto
-Flow:
-  branch: auto
-  repo: auto
