@@ -82,7 +82,7 @@ class Hooks implements
 		}
 
 		// Do not announce newly added file uploads as articles...
-		if ( $wikiPage->getTitle()->getNsText() && $wikiPage->getTitle()->getNsText() == $this->discordNotifier->getMessage( 'discordnotifications-file-namespace' ) ) {
+		if ( $wikiPage->getTitle()->getNsText() && $wikiPage->getTitle()->getNsText() == $this->discordNotifier->getMessage( 'discordnotifications-file-namespace' ) && $isNew ) {
 			return;
 		}
 
