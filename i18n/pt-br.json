@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Bartomelow",
 			"Eduardo Addad de Oliveira",
 			"Eduardoaddad"
 		]
@@ -15,6 +16,7 @@
 	"discordnotifications-delete": "excluir",
 	"discordnotifications-history": "histórico",
 	"discordnotifications-diff": "dif",
+	"discordnotifications-preview": "Pré-visualizar",
 	"discordnotifications-bytes": "$1 {{PLURAL:$1|byte|bytes}}",
 	"discordnotifications-article-saved": "📝 $1 $2 o artigo $3 $4",
 	"discordnotifications-article-saved-minor-edits": "fez edição menor para",
@@ -32,6 +34,7 @@
 	"discordnotifications-block-user-reason": "com razão",
 	"discordnotifications-block-user-list": "Lista de todos os bloqueios",
 	"discordnotifications-summary": "Resumo: $1",
+	"discordnotifications-content": "Conteúdo:",
 	"discordnotifications-view-user-rights": "Exibir ou gerenciar direitos do usuário",
 	"discordnotifications-change-user-groups": "%s mudou os grupos de usuários para %s. Novos grupos: %s",
 	"discordnotifications-change-user-groups-with-old": "$1 alterou os grupos de usuários por $2. Grupos antigos: $3. Novos grupos: $4",
