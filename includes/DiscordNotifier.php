@@ -229,7 +229,6 @@ class DiscordNotifier {
 
 		// Execute the curl script
 		$_ = curl_exec( $h );
-		curl_close( $h );
 	}
 
 	/**
