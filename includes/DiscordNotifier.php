@@ -269,10 +269,19 @@ class DiscordNotifier {
 		$isValid = $urlParts !== null
 			&& $urlParts['scheme'] === 'https'
 			&& !isset( $urlParts['port'] )
-			&& !isset( $urlParts['query'] )
 			&& !isset( $urlParts['fragment'] )
 			&& preg_match( "/^(?:canary\.|ptb\.)?(discord|discordapp)\.com$/", $urlParts['host'] )
 			&& preg_match( "#^/api/webhooks/[0-9]+/[a-zA-Z0-9_-]*$#", $urlParts['path'] );
+
+		// Only allow thread_id query parameter
+		// https://discord.com/developers/docs/resources/webhook#execute-webhook-query-string-params
+		if ( $isValid && isset( $urlParts['query'] ) && $urlParts['query'] !== '' ) {
+			parse_str( $urlParts['query'], $queryParams );
+
+			if ( $queryParams && array_keys( $queryParams ) !== [ 'thread_id' ] ) {
+				$isValid = false;
+			}
+		}
 
 		if ( !$isValid ) {
 			$this->logger->warning( 'Invalid webhook URL: {url}', [ 'url' => $url ] );
