@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Engineer56",
+			"InstantFurry",
 			"Kareyac",
 			"Pacha Tchernof",
 			"Vlad5250"
@@ -20,7 +21,7 @@
 	"discordnotifications-diff": "разн.",
 	"discordnotifications-preview": "предпросмотр",
 	"discordnotifications-bytes": "$1 {{PLURAL:$1|байт|байта|байт}}",
-	"discordnotifications-article-saved": "📝 $1 {{gender:$1|$2|$2а|$2-а}} малую правку в статье «$3» $4",
+	"discordnotifications-article-saved": "📝 $1 {{gender:$1|$2|$2а|$2-а}} статью «$3» $4",
 	"discordnotifications-article-saved-minor-edits": "минимально отредактировал",
 	"discordnotifications-article-saved-edit": "отредактировал",
 	"discordnotifications-article-created": "📄 $1 {{gender:$1|создал|создала|создал-а}} статью «$2» $3",
@@ -29,7 +30,7 @@
 	"discordnotifications-article-undeleted": "🔄 Пользователь $1 восстановил статью $2 Причина: $3",
 	"discordnotifications-article-moved": "➡ Пользователь $1 переименовал $2 в $3. Причина: $4",
 	"discordnotifications-article-protected": "🔒 Пользователь $1 установил защиту от $2 на статью «$3». Причина: $4",
-	"discordnotifications-article-protected-change": "изменил",
+	"discordnotifications-article-protected-change": "изменил защиту",
 	"discordnotifications-article-protected-remove": "снял защиту с",
 	"discordnotifications-new-user": "👥 Новая учётная запись $1 была только что создана $2",
 	"discordnotifications-new-user-filtered": "👥 Новая учетная запись пользователя $1 только что создана $2 \n\nСоответствует фильтру",
