@@ -22,7 +22,7 @@
 	"discordnotifications-file-namespace": "Fichier",
 	"discordnotifications-article-deleted": "❌ $1 huet den Artikel $2 geläscht Grond: $3",
 	"discordnotifications-article-moved": "❌ $1 huet den Artikel $2 op $3 geréckelt Grond: $4",
-	"discordnotifications-article-protected-remove": "huet d'Spär ewechgeholl vu(n)",
+	"discordnotifications-article-protected-remove": "huet d'Protektioun opgehuewe vu(n)",
 	"discordnotifications-new-user": "👥 Neie Benotzerkont $1 elo just ugeluecht $2",
 	"discordnotifications-file-uploaded": "📤 $1 huet de Fichier <$2|$3> eropgelueden (Format: $4, Gréisst: $5 $6, Resümmee: $7)",
 	"discordnotifications-block-user-reason": "mam Grond",
