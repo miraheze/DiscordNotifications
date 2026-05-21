@@ -10,7 +10,7 @@
 			"렌즈"
 		]
 	},
-	"discordnotifications-desc": "미디어위키 사이트에서 발생한 선택된 동작에 대한 디스코드 알림을 전송합니다.",
+	"discordnotifications-desc": "미디어위키 사이트에서 발생한 선택된 작업에 대한 디스코드 알림을 전송합니다.",
 	"discordnotifications-block": "차단",
 	"discordnotifications-groups": "권한",
 	"discordnotifications-talk": "토론",
