@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"BaRaN6161 TURK",
+			"HakanIST",
 			"Hedda",
 			"MuratTheTurkish",
 			"Rapsar",
@@ -15,10 +16,12 @@
 	"discordnotifications-groups": "gruplar",
 	"discordnotifications-talk": "mesaj",
 	"discordnotifications-contribs": "katkılar",
+	"discordnotifications-centralauth": "CentralAuth",
 	"discordnotifications-edit": "değiştir",
 	"discordnotifications-delete": "sil",
 	"discordnotifications-history": "geçmiş",
 	"discordnotifications-diff": "fark",
+	"discordnotifications-preview": "önizleme",
 	"discordnotifications-bytes": "$1 {{PLURAL:$1|bayt}}",
 	"discordnotifications-article-saved": "📝 $1 kullanıcısı $3 maddesi $2 $4",
 	"discordnotifications-article-saved-minor-edits": "küçük düzenleme yapıldı",
@@ -26,11 +29,13 @@
 	"discordnotifications-article-created": "📄 $1 kullanıcısı $2 maddesini oluşturdu $3",
 	"discordnotifications-file-namespace": "Dosya",
 	"discordnotifications-article-deleted": "❌ $1 kullanıcısı $2 maddesini sildi. Sebep: $3",
+	"discordnotifications-article-undeleted": "🔄 $1, $2 maddesinin silme işlemini geri aldı Neden: $3",
 	"discordnotifications-article-moved": "➡ $1 kullanıcısı $2 maddeyi $3 olarak taşıdı. Sebep: $4",
 	"discordnotifications-article-protected": "🔒 $1 kullanıcısı $3 maddesini $2. Sebep: $4",
 	"discordnotifications-article-protected-change": "korumayı değiştirdi",
 	"discordnotifications-article-protected-remove": "korumayı kaldırıldı",
 	"discordnotifications-new-user": "👥 Yeni $1 kullanıcı hesabı oluşturuldu $2",
+	"discordnotifications-new-user-filtered": "👥 Yeni kullanıcı hesabı $1 oluşturuldu $2\n\nEşleşen filtre",
 	"discordnotifications-file-uploaded": "📤 $1 kullanıcısı <$2|$3> dosyayı yükledi (biçim: $4, boyut: $5 $6, özet: $7)",
 	"discordnotifications-block-user": "🚫 $1 kullanıcısı $2 kullanıcısını engelledi $3 Engel bitmesine: $4. $5",
 	"discordnotifications-block-user-reason": "sebeple",
@@ -40,5 +45,6 @@
 	"discordnotifications-view-user-rights": "Kullanıcı haklarını görüntüleyin veya yönetin",
 	"discordnotifications-change-user-groups": "%s kullanıcısı %s için kullanıcı gruplarını değiştirdi. Yeni gruplar: %s",
 	"discordnotifications-change-user-groups-with-old": "$1 kullanıcısı $2 için kullanıcı gruplarını değiştirdi. Eski gruplar: $3. Yeni gruplar: $4",
-	"discordnotifications-import-complete": "⤵️ $1 maddesi aktarıldı."
+	"discordnotifications-import-complete": "⤵️ $1 maddesi aktarıldı.",
+	"discordnotifications-moderation-pending": "🔍 $1, $2 için [moderasyon kuyruğuna]($3) bir düzenleme gönderdi."
 }
