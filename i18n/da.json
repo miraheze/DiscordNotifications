@@ -1,0 +1,43 @@
+{
+	"@metadata": {
+		"authors": [
+			"Zakawer2"
+		]
+	},
+	"discordnotifications-desc": "Sender Discord-notifikationer for udvalgte handlinger som er forekommet på dine MediaWiki-sider.",
+	"discordnotifications-block": "bloker",
+	"discordnotifications-groups": "grupper",
+	"discordnotifications-talk": "diskussion",
+	"discordnotifications-contribs": "bidrag",
+	"discordnotifications-centralauth": "CentralAuth",
+	"discordnotifications-edit": "rediger",
+	"discordnotifications-delete": "slet",
+	"discordnotifications-history": "historik",
+	"discordnotifications-diff": "forskel",
+	"discordnotifications-preview": "forhåndsvisning",
+	"discordnotifications-bytes": "$1 byte",
+	"discordnotifications-article-saved": "📝 $1 har $2 artiklen $3 $4",
+	"discordnotifications-article-saved-minor-edits": "lavet en mindre ændring til",
+	"discordnotifications-article-saved-edit": "redigeret",
+	"discordnotifications-article-created": "📄 $1 har skabt artiklen $2 $3",
+	"discordnotifications-file-namespace": "Fil",
+	"discordnotifications-article-deleted": "❌ $1 har slettet artiklen $2 Årsag: $3",
+	"discordnotifications-article-undeleted": "🔄 $1 har genetableret artiklen $2 Årsag: $3",
+	"discordnotifications-article-moved": "➡ $1 har flyttet artiklen $2 til $3. Årsag: $4",
+	"discordnotifications-article-protected": "🔒 $1 har $2 artiklen $3. Årsag: $4",
+	"discordnotifications-article-protected-change": "ændret beskyttelsen for",
+	"discordnotifications-article-protected-remove": "fjernet beskyttelsen fra",
+	"discordnotifications-new-user": "👥 En ny brugerkonto ved navn $1 blev lige oprettet $2",
+	"discordnotifications-new-user-filtered": "👥 En ny brugerkonto ved navn $1 blev lige oprettet $2\n\nTilsvarende filter",
+	"discordnotifications-file-uploaded": "📤 $1 har uploadet filen <$2|$3> (format: $4, størrelse: $5 $6, beskrivelse: $7)",
+	"discordnotifications-block-user": "🚫 $1 har blokeret $2 $3 Blokeringens udløb: $4. $5",
+	"discordnotifications-block-user-reason": "med årsagen",
+	"discordnotifications-block-user-list": "Liste over alle blokeringer",
+	"discordnotifications-summary": "Oversigt: $1",
+	"discordnotifications-content": "Indhold:",
+	"discordnotifications-view-user-rights": "Se eller administrer brugerrettigheder",
+	"discordnotifications-change-user-groups": "%s har ændret brugergrupper for %s. Nye grupper: %s",
+	"discordnotifications-change-user-groups-with-old": "$1 har ændret brugergrupper for $2. Gamle grupper: $3. Nye grupper: $4",
+	"discordnotifications-import-complete": "⤵️ Artiklen $1 er blevet importeret.",
+	"discordnotifications-moderation-pending": "🔍 $1 har indsendt en redigering af $2 til [moderationskøen]($3)."
+}
