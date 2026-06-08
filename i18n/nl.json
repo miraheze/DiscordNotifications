@@ -3,7 +3,8 @@
 		"authors": [
 			"Elphie",
 			"Mainframe98",
-			"McDutchie"
+			"McDutchie",
+			"Siebrand"
 		]
 	},
 	"discordnotifications-desc": "Stuurt Discord-meldingen voor geselecteerde handelingen die op uw MediaWiki-sites zijn verricht.",
@@ -38,8 +39,8 @@
 	"discordnotifications-summary": "Samenvatting: $1",
 	"discordnotifications-content": "Inhoud:",
 	"discordnotifications-view-user-rights": "Gebruikerrechten beheren of bekijken",
-	"discordnotifications-change-user-groups": "%s heeft de gebruikersgroepen veranderd voor %s. Nieuwe groepen: %s",
-	"discordnotifications-change-user-groups-with-old": "$1 heeft de gebruikersgroepen veranderd voor $2. Oude groepen: $3. Nieuwe groepen: $4",
+	"discordnotifications-change-user-groups": "%s heeft de gebruikersgroepen gewijzigd voor %s. Nieuwe groepen: %s",
+	"discordnotifications-change-user-groups-with-old": "$1 heeft de gebruikersgroepen gewijzigd voor $2. Oude groepen: $3. Nieuwe groepen: $4",
 	"discordnotifications-import-complete": "⤵️ Het artikel $1 is geïmporteerd.",
 	"discordnotifications-moderation-pending": "🔍 $1 heeft een bewerking van $2 ingediend bij de [moderatiewachtrij]($3)."
 }
