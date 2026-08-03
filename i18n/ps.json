@@ -1,0 +1,43 @@
+{
+	"@metadata": {
+		"authors": [
+			"شاه زمان پټان"
+		]
+	},
+	"discordnotifications-desc": "ستاسو مېډياويکي وېبځايونو کې د ټاکل شويو کړنو لپاره د ډيسکارډ خبرتياوې لېږي.",
+	"discordnotifications-block": "بنديز لگول",
+	"discordnotifications-groups": "ډلې",
+	"discordnotifications-talk": "خبرې اترې",
+	"discordnotifications-contribs": "ونډې",
+	"discordnotifications-centralauth": "مرکزي‌هويت",
+	"discordnotifications-edit": "سمول",
+	"discordnotifications-delete": "ړنگول",
+	"discordnotifications-history": "پېښليک",
+	"discordnotifications-diff": "توپير",
+	"discordnotifications-preview": "مخکتنه",
+	"discordnotifications-bytes": "$1 {{PLURAL:$1|بايټه|بايټونه}}",
+	"discordnotifications-article-saved": "📝 $1 $2 ليکنه $3 $4",
+	"discordnotifications-article-saved-minor-edits": "کوچنی سمون يې وکړ",
+	"discordnotifications-article-saved-edit": "سم شوی",
+	"discordnotifications-article-created": "📄 $1 د $2 $3 ليکنه جوړه کړه",
+	"discordnotifications-file-namespace": "دوتنه",
+	"discordnotifications-article-deleted": "❌ $1 د $2 ليکنه ړنگه کړه لامل يې: $3",
+	"discordnotifications-article-undeleted": "🔄 $1 د $2 ليکنه ناړنگه کړه لامل يې: $3",
+	"discordnotifications-article-moved": "➡ $1 د $2 لیکنه $3 ته ولېږدوله. لامل يې: $4",
+	"discordnotifications-article-protected": "🔒 $1 د $3 ليکنه $2. لامل يې: $4",
+	"discordnotifications-article-protected-change": "ژغورنه بدله کړه د",
+	"discordnotifications-article-protected-remove": "ژغورنه لرې کړه د",
+	"discordnotifications-new-user": "👥 $1 نوی کارن گڼون همدا اوس جوړ شو $2",
+	"discordnotifications-new-user-filtered": "👥 نوی کارن گڼون $1 همدا اوس جوړ شو $2\n\nورته چاڼگر",
+	"discordnotifications-file-uploaded": "📤 $1 د <$2|$3> دوتنه راپورته کړه (بڼه: $4، کچه: $5 $6، لنډيز: $7)",
+	"discordnotifications-block-user": "🚫 $1 پر $2 د $3 له کبله بنديز ولگاوه، د بنديز پای‌نېته يې: $4. $5",
+	"discordnotifications-block-user-reason": "لامل سره",
+	"discordnotifications-block-user-list": "د ټولو بنديزونو لړليک",
+	"discordnotifications-summary": "لنډيز: $1",
+	"discordnotifications-content": "منځپانگه:",
+	"discordnotifications-view-user-rights": "کارن رښتې کتل او مهارول",
+	"discordnotifications-change-user-groups": "%s د %s کارن ډلو کې بدلون راوست. نوې ډلې: %s",
+	"discordnotifications-change-user-groups-with-old": "$1 د $2 کارن ډلو کې بدلون راوست. زړې ډلې: $3. نوې ډلې: $4",
+	"discordnotifications-import-complete": "⤵️ $1 ليکنه رالېږودل شوې ده.",
+	"discordnotifications-moderation-pending": "🔍 $1 د $2 لپاره [منځلارۍ کتار] ته سمون سپارلی دی ($3)"
+}
