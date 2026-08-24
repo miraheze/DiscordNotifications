@@ -1,0 +1,43 @@
+{
+	"@metadata": {
+		"authors": [
+			"AhmedG612"
+		]
+	},
+	"discordnotifications-desc": "Waxay Discord u dirtaa ogeysiisyo ku saabsan falalka la doortay ee ka dhacay bogaggaaga MediaWiki.",
+	"discordnotifications-block": "xannib",
+	"discordnotifications-groups": "Kooxo",
+	"discordnotifications-talk": "wadahadal",
+	"discordnotifications-contribs": "ku darsasho",
+	"discordnotifications-centralauth": "CentralAuth",
+	"discordnotifications-edit": "wax ka badal",
+	"discordnotifications-delete": "tirtir",
+	"discordnotifications-history": "taariikh",
+	"discordnotifications-diff": "Kala duwanaansho",
+	"discordnotifications-preview": "Hordhac",
+	"discordnotifications-bytes": "$1 {{PLURAL:$1|bayt|baytyo}}",
+	"discordnotifications-article-saved": "📝 $1 wuxuu leeyahay $2 maqaal $3 $4",
+	"discordnotifications-article-saved-minor-edits": "wuxuu ku sameeyay wax ka beddel yar",
+	"discordnotifications-article-saved-edit": "wax laga beddelay",
+	"discordnotifications-article-created": "📄 $1 wuxuu abuuray maqaalka $2 $3",
+	"discordnotifications-file-namespace": "Fayl",
+	"discordnotifications-article-deleted": "❌ $1 wuxuu tirtiray maqaalka $2. Sababta: $3",
+	"discordnotifications-article-undeleted": "🔄 $1 wuxuu soo celiyay maqaalka $2. Sababta: $3",
+	"discordnotifications-article-moved": "➡ $1 wuxuu u wareejiyay maqaalka $2 una raray $3. Sababta: $4",
+	"discordnotifications-article-protected": "🔒 $1 wuxuu $2 maqaalka $3. Sababta: $4",
+	"discordnotifications-article-protected-change": "wuxuu beddelay ilaalinta",
+	"discordnotifications-article-protected-remove": "ka saaray ilaalintii",
+	"discordnotifications-new-user": "👥 Koonto isticmaale cusub oo ah $1 ayaa hadda la abuuray $2",
+	"discordnotifications-new-user-filtered": "👥 Koonto isticmaale cusub oo ah $1 ayaa hadda la abuuray $2\n\nLa jaanqaadaya shaandhada",
+	"discordnotifications-file-uploaded": "📤 $1 wuxuu soo geliyay faylka <$2|$3> (qaab: $4, cabbir: $5 $6, soo koobid: $7)",
+	"discordnotifications-block-user": "🚫 $1 wuxuu xannibay $2 $3. Dhicitaanka xannibaadda: $4. $5",
+	"discordnotifications-block-user-reason": "oo leh sabab",
+	"discordnotifications-block-user-list": "Liiska dhammaan xannibaadaha",
+	"discordnotifications-summary": "Soo Koobid: $1",
+	"discordnotifications-content": "Nuxur:",
+	"discordnotifications-view-user-rights": "Eeg ama maamul xuquuqda isticmaalaha",
+	"discordnotifications-change-user-groups": "%s ayaa beddelay kooxaha isticmaalaha ee %s. Kooxaha cusub: %s",
+	"discordnotifications-change-user-groups-with-old": "$1 ayaa beddelay kooxaha isticmaalaha ee $2. Kooxihii hore: $3. Kooxaha cusub: $4",
+	"discordnotifications-import-complete": "⤵️ Maqaalka $1 waa la soo dejiyay.",
+	"discordnotifications-moderation-pending": "🔍 $1 ayaa u gudbiyay wax-ka-beddelka $2 [safka dhexdhexaadinta]($3)."
+}
