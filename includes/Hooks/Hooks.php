@@ -530,9 +530,9 @@ class Hooks implements
 			return;
 		}
 
-        if ( $performer === false ) {
-            return;
-        }
+		if ( $performer === false ) {
+			return;
+		}
 
 		$message = $this->discordNotifier->getMessage( 'discordnotifications-change-user-groups-with-old',
 			$this->discordNotifier->getDiscordUserText( $performer ),
